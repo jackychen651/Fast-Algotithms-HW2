@@ -16,7 +16,7 @@ y_real=rand(N,1)*2-1;
 y_im=rand(N,1)*2-1;
 [theta_y, r_y] = cart2pol(y_real, y_im);
 q_y=rand(N,1)*2-1;
-u = FMM2D(r_x, theta_x, r_y, theta_y, q_y, M);
+u = multipole2D(r_x, theta_x, r_y, theta_y, q_y, M);
 u_truth = GroundTruth2D(r_x, theta_x, r_y, theta_y, q_y);
 error = norm(u-u_truth,2)/sum(abs(q_y),1);
 
@@ -38,7 +38,7 @@ while N < 10000
     q_y=rand(N,1)*2-1;
 
     tic
-    u = FMM2D(r_x, theta_x, r_y, theta_y, q_y, M);
+    u = multipole2D(r_x, theta_x, r_y, theta_y, q_y, M);
     run_time1=toc;
     t1=[t1;run_time1];
 
