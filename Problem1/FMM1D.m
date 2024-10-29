@@ -44,12 +44,15 @@ for l = L:-1:1
     if l == L
         for j = 1:2^l
             mid(j,l)=-1+(2*j-1)/2^l;
-            A1_interval(j,l) = sum(q(I{j,l}),1);
-            A2_interval(j,l) = dot(x(I{j,l})-mid(j,l), q(I{j,l}));
+            A1_interval(j,l) = sum(q(I{j,l}),1)/2;
+            A2_interval(j,l) = -dot(x(I{j,l})-mid(j,l), q(I{j,l}))/2;
         end
     else
         for j=1:2^l
             mid(j,l)=-1+(2*j-1)/2^l;
+            A1_interval(j,l)=A1_interval(2*j-1,l+1)+A1_interval(2*j,l+1);
+            A2_interval(j,l)=A2_interval(2*j-1,l+1)-(mid(2*j-1,l+1)-mid(j,l))*A1_interval(2*j-1,l+1)...
+                            +A2_interval(2*j,l+1)-(mid(2*j,l+1)-mid(j,l))*A1_interval(2*j,l+1);
         end
     end
 end
