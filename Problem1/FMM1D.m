@@ -97,7 +97,9 @@ for i=1:2^L
     for j=max(1, i - 1):min(2^L, i + 1)
         for k=1:size(I{i,L},1)
             for k_=1:size(I{j,L},1)
-                u(I{i,L}(k))=u(I{i,L}(k))+q(I{j,L}(k_))*abs(x(I{i,L}(k))-x(I{j,L}(k_)))/2;
+                if (j~=i) || (k~=k_)
+                    u(I{i,L}(k))=u(I{i,L}(k))+q(I{j,L}(k_))*abs(x(I{i,L}(k))-x(I{j,L}(k_)))/2;
+                end
             end
         end
     end

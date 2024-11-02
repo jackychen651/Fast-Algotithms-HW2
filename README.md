@@ -7,3 +7,7 @@ Currently there has been some untackled bugs in this code implementation. Bugs a
 The main branch consists of code implementation before ddl. The debug branch consists of code implementation that is being debugged.
 
 News: Problem 1 has finished debugging. Results will be posted later.
+
+For Problem 2, partial debugging has been done. The rest of bugs should lie in the local to local expansion or multiple to local expansion.
+
+For Problem 3, it is simply imcomplete.

@@ -14,7 +14,9 @@ P = size(x, 1);
 u = zeros(P, 1);
 for i = 1:P
     for j = 1:P
-        u(i) = u(i) + q(j) * exp(1j*K*abs(x(i)-x(j)));
+        if i~=j
+            u(i) = u(i) + q(j) * exp(1j*K*abs(x(i)-x(j)));
+        end
     end
 end
 u = -1j/(2*K)*u;

@@ -64,23 +64,26 @@ for l=2:L
             if abs(j-i)<=1 || abs(ceil(j/2) - ceil(i/2)) > 1
                 continue
             end
-            B1_interval(i,l)=B1_interval(i,l)+cos((mid(j,l)-mid(i,l))*K)*(A1_interval(j,l)+sign(j-i)*A2_interval(j,l))+1j*sin(K*(mid(j,l)-mid(i,l)))*(sign(j-i)*A1_interval(j,l)-A2_interval(j,l));
+            B1_interval(i,l)=B1_interval(i,l)+cos(K*(mid(j,l)-mid(i,l)))*(A1_interval(j,l)+sign(j-i)*A2_interval(j,l))+1j*sin(K*(mid(j,l)-mid(i,l)))*(sign(j-i)*A1_interval(j,l)-A2_interval(j,l));
             B2_interval(i,l)=1j*cos(K*(mid(j,l)-mid(i,l)))*(sign(j-i)*A1_interval(j,l)+A2_interval(j,l))+sin(K*(mid(j,l)-mid(i,l)))*(-sign(j-i)*A2_interval(j,l)-A1_interval(j,l));
-        end
-    end
-end
-for i=1:2^L
-    for j=max(1, i - 1):min(2^L, i + 1)
-        for k=1:size(I{i,L},1)
-            for m=1:size(I{j,L},1)
-                u(I{i,L}(k)) = u(I{i,L}(k)) + q(I{j,L}(m))*exp(1j*K*abs(x(I{i,L}(k))-x(I{j,L}(m))));
-            end
         end
     end
 end
 
 for i=1:2^L
     for k=1:size(I{i,L},1)
-        u(I{i,L}(k))=u(I{i,L}(k))+B1_interval(i,l)*cos(K*(u(I{i,L}(k))-mid(i,l)))+B2_interval(i,l)*sin(K*(u(I{i,L}(k))-mid(i,l)));
+        u(I{i,L}(k))=u(I{i,L}(k))+B1_interval(i,L)*cos(K*(x(I{i,L}(k))-mid(i,L)))+B2_interval(i,L)*sin(K*(x(I{i,L}(k))-mid(i,L)));
+    end
+end
+
+for i=1:2^L
+    for j=max(1, i - 1):min(2^L, i + 1)
+        for k=1:size(I{i,L},1)
+            for k_=1:size(I{j,L},1)
+                if (j~=i) || (k~=k_)
+                    u(I{i,L}(k)) = u(I{i,L}(k)) -1j/2/K* q(I{j,L}(k_))*exp(1j*K*abs(x(I{i,L}(k))-x(I{j,L}(k_))));
+                end
+            end
+        end
     end
 end
