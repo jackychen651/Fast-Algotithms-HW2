@@ -13,11 +13,13 @@ rng(42);
 % And the charges are also with [-1, 1], unifrom distribution
 
 %% debug
-P=10;
-x=((1:10)-ones(1,10)*5.5).'/5;
-K=4;
-q=ones(P,1);
+P=8;
+x=linspace(-1+1/P, 1-1/P, P)';
+q=zeros(P,1);
+q(1)=1;
 u = FMM1D(x,q);
+u_true = GroundTruth1D(x,q);
+error = norm(u - u_true, 2) / sum(abs(q),1)
 
 %% test
 t1=[];

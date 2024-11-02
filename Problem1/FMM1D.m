@@ -24,7 +24,7 @@ M = 2^L;
 x_idx = zeros(P, L);
 A1_interval = zeros(2^L, L);
 A2_interval = zeros(2^L, L);
-B0_interval = zeros(2^L, L);
+%B0_interval = zeros(2^L, L);
 B1_interval = zeros(2^L, L);
 B2_interval = zeros(2^L, L);
 mid = zeros(2^L, L);
@@ -58,31 +58,47 @@ for l = L:-1:1
 end
 for l=2:L
     for i = 1:2^l
-        B0_interval(i,l)=B0_interval(ceil(i/2),l-1);
-        B1_interval(i,l)=B1_interval(ceil(i/2),l-1);
+        B1_interval(i,l)=B1_interval(ceil(i/2),l-1)-B2_interval(ceil(i/2),l-1)*(mid(ceil(i/2),l-1)-mid(i,l));
         B2_interval(i,l)=B2_interval(ceil(i/2),l-1);
         for j=1:2^l
             
             if abs(j-i)<=1 || abs(ceil(j/2) - ceil(i/2)) >1
                 continue
             end
-            B0_interval(i,l)=B0_interval(i,l)+abs(mid(j,l)-mid(i,l))*A1_interval(j,l)-sign(j-i)*A2_interval(j,l);
+            B1_interval(i,l)=B1_interval(i,l)+abs(mid(j,l)-mid(i,l))*A1_interval(j,l)-sign(j-i)*A2_interval(j,l);
             B2_interval(i,l)=B2_interval(i,l)-sign(j-i)*A1_interval(j,l);
         end
     end
 end
+% for i=1:2^L
+%     for j=max(1, i - 1):min(2^L, i + 1)
+%         for k=1:size(I{i,L},1)
+%             for m=1:size(I{j,L},1)
+%                 u(I{i,L}(k)) = u(I{i,L}(k)) + q(I{j, L}(m))*abs(x(I{i, L}(k))-x(I{j,L}(m))) / 2;
+%             end
+%         end
+%     end
+% end
+
+% for i=1:2^L
+%     for k=1:size(I{i,L},1)
+%         u(I{i,L}(k))=u(I{i,L}(k))+B0_interval(i,L)+B1_interval(i,L)*abs(x(I{i,L}(k))-mid(i,L))+B2_interval(i,L)*abs(x(I{i,L}(k))-mid(i,L));
+%     end
+% end
+
+
 for i=1:2^L
-    for j=max(1, i - 1):min(2^L, i + 1)
-        for k=1:size(I{i,L},1)
-            for m=1:size(I{j,L},1)
-                u(I{i,L}(k)) = u(I{i,L}(k)) + q(I{j, L}(m))*abs(x(I{i, L}(k))-x(I{j,L}(m))) / 2;
-            end
-        end
+    for k=1:size(I{i,L},1)
+        u(I{i,L}(k))=u(I{i,L}(k))+B1_interval(i,L)+B2_interval(i,L)*(x(I{i,L}(k))-mid(i,L));
     end
 end
 
 for i=1:2^L
-    for k=1:size(I{i,L},1)
-        u(I{i,L}(k))=u(I{i,L}(k))+B0_interval(i,L)+B1_interval(i,L)*abs(x(I{i,L}(k))-mid(i,L))+B2_interval(i,L)*abs(x(I{i,L}(k))-mid(i,L));
+    for j=max(1, i - 1):min(2^L, i + 1)
+        for k=1:size(I{i,L},1)
+            for k_=1:size(I{j,L},1)
+                u(I{i,L}(k))=u(I{i,L}(k))+q(I{j,L}(k_))*abs(x(I{i,L}(k))-x(I{j,L}(k_)))/2;
+            end
+        end
     end
 end
